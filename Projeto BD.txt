@@ -1,0 +1,94 @@
+
+CREATE DATABASE fastfoods; 
+
+
+USE fastfoods;
+
+CREATE TABLE nome_filial (
+	ID_filial		INT PRIMARY KEY IDENTITY(1,1), -- AUTO_INCREMENT
+	nome		VARCHAR(100),
+	cnpj		VARCHAR(100),
+	ano		CHAR(4),
+	capital 	decimal (13,2)
+);
+
+ 
+CREATE TABLE clientes (
+	ID_clientes 	INT PRIMARY KEY IDENTITY(1,1), -- AUTO_INCREMENT
+	nome			VARCHAR(100),
+	cpf		varchar(11),
+	telefone		VARCHAR(11)
+	
+);
+
+CREATE TABLE lugar (
+	ID_lugar		INT PRIMARY KEY IDENTITY(1,1), -- AUTO_INCREMENT
+	nome varchar(100),
+	rua		VARCHAR(100),
+	numero		VARCHAR(100),
+	bairro varchar(100),
+	cep      CHAR(8),
+	cidade varchar(100),
+	estado char(2),
+	ID_filial		INT,
+	CONSTRAINT filial_lugarr FOREIGN KEY (ID_filial) REFERENCES nome_filial (ID_filial)
+);
+
+CREATE TABLE pedido (
+	COD_pedido INT PRIMARY KEY IDENTITY(1,1), -- AUTO_INCREMENT
+	nome_Filial varchar(100),
+	nome varchar(100),
+	comida VARCHAR(100),
+    Numero_Do_Pedido VARCHAR (100),
+	ID_filial  int,
+	ID_clientes  int,
+	ID_lugar int,
+	CONSTRAINT filial_pedido FOREIGN KEY (ID_filial) REFERENCES nome_filial (ID_filial),
+	CONSTRAINT filial_clientes FOREIGN KEY (ID_clientes) REFERENCES clientes (ID_clientes),
+	CONSTRAINT filial_lugar FOREIGN KEY (ID_lugar) REFERENCES lugar (ID_lugar)
+);
+
+
+INSERT nome_filial (nome, cnpj, ano, capital) VALUES
+('mc donalds',' 42591651000143','1940',23220000000.00),
+('burger king','13574594000196','1954',4700000000.00),
+('habibs','02149915000199','1988',350000000.00);
+
+
+INSERT clientes  (nome,cpf,telefone)VALUES
+('Vinicius Augusto','60586941320','9722613147'),
+('Welligton','13076368613','9234292863'),
+('joao','44143969807','6723226313');
+
+
+
+INSERT lugar (nome,rua,numero,bairro,cep,cidade,estado) VALUES
+('mc donalds',' R. da Fraternidade','311','Parque dos Lima','14403120','Franca','Sp'),
+('burger king',' Av. Comendador Francisco Avelino Maia','1701','Canjeranus','37900531','Passos','Mg'),
+('habibs','Av. Comendador Francisco Avelino Maia','4085','Belo Horizonte','37900001','Passos','Mg');
+
+
+INSERT pedido (nome_Filial,nome,comida,Numero_Do_Pedido) VALUES
+('mc donalds','Vinicius Augusto','Big Mac','18'),
+('burger king','Welligton','Cheddar Duplo','45'),
+('habibs','joao','3 esfirras de carne','71');
+
+
+SELECT * FROM nome_filial;
+SELECT * FROM clientes;
+SELECT * FROM lugar;
+SELECT * FROM pedido;
+
+select pedido.comida,nome_filial.nome from nome_filial
+join pedido
+on nome_filial.ID_filial=pedido.COD_pedido
+
+
+SELECT nome_filial.nome, pedido.Numero_Do_Pedido FROM nome_filial
+JOIN pedido
+ON nome_filial.ID_filial= pedido.COD_pedido;
+
+SELECT nome_filial.nome, lugar.rua,lugar.bairro,lugar.cidade  FROM nome_filial
+JOIN lugar
+on nome_filial.ID_filial= lugar.ID_lugar
+order by nome asc;
